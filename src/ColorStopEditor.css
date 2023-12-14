@@ -1,0 +1,11 @@
+.ColorStopEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ColorStopEditor__Footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 11px;
+}

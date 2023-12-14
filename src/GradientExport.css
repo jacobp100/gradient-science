@@ -1,0 +1,37 @@
+.GradientExport {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.GradientExport__Row {
+  display: flex;
+  align-items: center;
+}
+
+.GradientExport__Label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-variant: tabular-nums;
+}
+
+.GradientExport__Quality {
+  font-size: 10px;
+  line-height: 12px;
+  opacity: 0.8;
+}
+
+.GradientExport__Code {
+  height: 120px;
+  margin: 0;
+  padding: 8px;
+  font-family: monospace;
+  word-break: break-all;
+  overflow-y: scroll;
+  box-shadow: 0 0 0 1px #333;
+}
+
+.GradientExport__Copy {
+  align-self: flex-end;
+}

@@ -1,0 +1,10 @@
+.Editor__Field {
+  display: flex;
+  align-items: baseline;
+}
+
+.Editor__FieldLabel {
+  flex: 1;
+  font-size: 12px;
+  line-height: 14px;
+}

@@ -1,0 +1,21 @@
+.ControlPointsBezier {
+  position: relative;
+}
+
+.ControlPointsBezier__Svg {
+  display: block;
+}
+
+.ControlPointsBezier__Select {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  visibility: hidden;
+}
+
+.ControlPointsBezier:hover .ControlPointsBezier__Select,
+.ControlPointsBezier__Select:hover,
+.ControlPointsBezier__Select:focus,
+.ControlPointsBezier__Select:active {
+  visibility: visible;
+}

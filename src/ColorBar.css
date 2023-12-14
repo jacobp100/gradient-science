@@ -1,0 +1,28 @@
+.ColorBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--container-width);
+}
+
+.ColorBar__Gradient {
+  box-shadow: 0 0 0 1px #333;
+}
+
+.ColorBar__Stops {
+  position: relative;
+  height: 24px;
+  width: var(--container-width);
+}
+
+.ColorBar__Stop {
+  position: absolute;
+  transform: translate(-50%, 0)
+    translate3d(calc(var(--container-width) * var(--position)), 0, 0)
+    rotate(var(--rotate));
+  --rotate: 0deg;
+}
+
+.ColorBar__Stop--up {
+  --rotate: 180deg;
+}

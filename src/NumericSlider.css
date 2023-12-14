@@ -1,0 +1,25 @@
+.NumericSlider {
+  display: flex;
+  gap: 12px;
+}
+
+.NumericSlider__Inner {
+  display: contents;
+}
+
+.NumericSlider__Label {
+  order: 0;
+  width: 15px;
+}
+
+.NumericSlider__Range {
+  order: 1;
+  flex: 1;
+  min-width: 0;
+}
+
+.NumericSlider__Value {
+  order: 2;
+  flex: none;
+  width: 50px;
+}

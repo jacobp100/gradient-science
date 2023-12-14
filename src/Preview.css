@@ -1,0 +1,36 @@
+.Preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  --checker-light: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="0" y="0" width="20" height="20" fill="%23fff"/><path d="M0 0H10V20H20V10H0Z" fill="%23eee"/></svg>');
+  --checker-dark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="0" y="0" width="20" height="20" fill="%23000"/><path d="M0 0H10V20H20V10H0Z" fill="%23111"/></svg>');
+}
+
+.Preview__Container {
+  position: relative;
+  align-self: flex-start;
+  box-shadow: 0 0 0 1px #333;
+}
+
+.Preview__Overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.Preview__Select {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  visibility: hidden;
+}
+
+.Preview:hover .Preview__Select,
+.Preview__Select:hover,
+.Preview__Select:focus,
+.Preview__Select:active {
+  visibility: visible;
+}
