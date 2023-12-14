@@ -60,11 +60,17 @@ export const Gradient = ({
     const sinA = Math.sin(angle - Math.PI / 2);
     const pixelWidth = canvas.width;
     const pixelHeight = canvas.height;
-    // FIXME - this is wrong
-    const length = Math.min(
-      Math.abs(pixelWidth / cosA),
-      Math.abs(pixelHeight / sinA)
-    );
+    const length =
+      2 *
+      Math.hypot(pixelWidth / 2, pixelHeight / 2) *
+      Math.max(
+        Math.abs(
+          Math.sin(Math.PI / 2 - angle + Math.atan(pixelWidth / pixelHeight))
+        ),
+        Math.abs(
+          Math.cos(Math.PI / 2 - angle + Math.atan(pixelHeight / pixelWidth))
+        )
+      );
 
     tileBatcher.redraw(
       pixelWidth,
