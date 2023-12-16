@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.9e373461.css",
-    "main.js": "/static/js/main.8eda2639.js",
-    "index.html": "/index.html",
-    "main.9e373461.css.map": "/static/css/main.9e373461.css.map",
-    "main.8eda2639.js.map": "/static/js/main.8eda2639.js.map"
+    "main.css": "/gradient-science/static/css/main.9e373461.css",
+    "main.js": "/gradient-science/static/js/main.8eda2639.js",
+    "index.html": "/gradient-science/index.html",
+    "main.9e373461.css.map": "/gradient-science/static/css/main.9e373461.css.map",
+    "main.8eda2639.js.map": "/gradient-science/static/js/main.8eda2639.js.map"
   },
   "entrypoints": [
     "static/css/main.9e373461.css",
