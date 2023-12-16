@@ -1,5 +1,6 @@
-import Color from "colorjs.io";
 import UnitBezier from "@mapbox/unitbezier";
+import Color from "colorjs.io";
+import { lastIndex } from "./orderedArray";
 import type {
   ColorProfile,
   ColorStop,
@@ -9,21 +10,40 @@ import type {
 
 const bins = 1024;
 
-const mixOklch = (d: number, a: Color, b: Color) => {
+const interpolateMidpoint = (d: number, m: number, p0: number, p1: number) => {
+  if (d <= p0) {
+    return 0;
+  } else if (d >= p1) {
+    return 1;
+  }
+
+  const pm = p0 + m * (p1 - p0);
+  if (d <= pm) {
+    const d0 = (pm - d) / (pm - p0);
+    return 0.5 - 0.5 * d0;
+  } else {
+    const d1 = (d - pm) / (p1 - pm);
+    return 0.5 + 0.5 * d1;
+  }
+};
+
+export const mixOklch = (d: number, a: Color, b: Color) => {
+  if (d <= 0) {
+    return a;
+  } else if (d >= 1) {
+    return b;
+  }
+
   const { 0: l0, 1: c0, 2: h0 } = a.coords;
   const { 0: l1, 1: c1, 2: h1 } = b.coords;
 
   let h: number;
-  let c: number;
   if (c0 === 0 && c1 === 0) {
     h = 0;
-    c = 0;
   } else if (c0 === 0) {
     h = h1;
-    c = c1;
   } else if (c1 === 0) {
     h = h0;
-    c = c0;
   } else {
     const xH = h0;
     let yH = h1;
@@ -34,32 +54,12 @@ const mixOklch = (d: number, a: Color, b: Color) => {
       yH += 360;
     }
     h = xH * (1 - d) + yH * d;
-    c = c0 * (1 - d) + c1 * d;
   }
 
+  const c = c0 * (1 - d) + c1 * d;
   const l = l0 * (1 - d) + l1 * d;
 
   return new Color({ spaceId: "oklch", coords: [l, c, h], alpha: 1 });
-};
-
-const findLastIndex = <T>(
-  elements: T[],
-  predicate: (value: T) => boolean
-): number | undefined => {
-  let start = 0;
-  let end = elements.length - 1;
-  let found: number | undefined = undefined;
-  while (start < end) {
-    const mid = ((start + end) / 2) | 0;
-    if (predicate(elements[mid])) {
-      found = mid;
-      start = mid + 1;
-    } else {
-      end = mid - 1;
-    }
-  }
-
-  return found;
 };
 
 export default class ColorScale {
@@ -72,8 +72,7 @@ export default class ColorScale {
     public readonly colorProfile: ColorProfile,
     colorStops: ColorStop[],
     opacityStops: OpacityStop[],
-    controlPoints: ControlPoints | undefined,
-    private readonly stops: number | undefined
+    controlPoints: ControlPoints | undefined
   ) {
     this.colorStops = colorStops
       .map((colorStop) => ({
@@ -97,13 +96,9 @@ export default class ColorScale {
         : null;
   }
   writeInto(_d: number, out: { r: number; g: number; b: number; a: number }) {
-    const { colorProfile, colorStops, opacityStops, unitBezier, stops, cache } =
-      this;
+    const { colorProfile, colorStops, opacityStops, unitBezier, cache } = this;
 
     let d = _d;
-    if (stops != null) {
-      d = Math.trunc(d * stops) / (stops - 1);
-    }
     if (unitBezier != null) {
       d = unitBezier.solve(d);
     }
@@ -131,15 +126,19 @@ export default class ColorScale {
       color = colorStops[colorStops.length - 1].color;
     } else {
       const index = Math.min(
-        findLastIndex(colorStops, (c) => c.position <= d) ?? 0,
+        lastIndex(colorStops, (c) => c.position <= d) ?? 0,
         colorStops.length - 2
       );
       const left = colorStops[index];
       const right = colorStops[index + 1];
-      const distance = (d - left.position) / (right.position - left.position);
+      const distance = interpolateMidpoint(
+        d,
+        left.midpoint,
+        left.position,
+        right.position
+      );
 
-      color =
-        distance > 0 ? mixOklch(distance, left.color, right.color) : left.color;
+      color = mixOklch(distance, left.color, right.color);
     }
     const coords = color == null ? [0, 0, 0] : color.to(colorProfile).coords;
 
@@ -154,17 +153,19 @@ export default class ColorScale {
       alpha = opacityStops[opacityStops.length - 1].alpha;
     } else {
       const index = Math.min(
-        findLastIndex(opacityStops, (c) => c.position <= d) ?? 0,
+        lastIndex(opacityStops, (c) => c.position <= d) ?? 0,
         opacityStops.length - 2
       );
       const left = opacityStops[index];
       const right = opacityStops[index + 1];
-      const distance = (d - left.position) / (right.position - left.position);
+      const distance = interpolateMidpoint(
+        d,
+        left.midpoint,
+        left.position,
+        right.position
+      );
 
-      alpha =
-        distance > 0
-          ? left.alpha + (right.alpha - left.alpha) * distance
-          : left.alpha;
+      alpha = left.alpha + (right.alpha - left.alpha) * distance;
     }
 
     out.r = cache[bin + 0] = Math.min(Math.max(coords[0], 0), 1);
@@ -178,6 +179,10 @@ export default class ColorScale {
   at(d: number) {
     const out = { r: NaN, g: NaN, b: NaN, a: NaN };
     this.writeInto(d, out);
-    return out;
+    return new Color({
+      spaceId: this.colorProfile,
+      coords: [out.r, out.g, out.b],
+      alpha: out.a,
+    });
   }
 }

@@ -1,0 +1,10 @@
+.OpacityStopEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.OpacityStopEditor__Footer {
+  display: flex;
+  justify-content: flex-end;
+}

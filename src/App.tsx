@@ -1,4 +1,3 @@
-import Color from "colorjs.io";
 import { useMemo, useState } from "react";
 import ColorScale from "./ColorScale";
 import { Editor } from "./Editor";
@@ -11,10 +10,12 @@ import {
   ControlPoints,
   Mode,
   OpacityStop,
+  PreviewBackground,
 } from "./types";
 import { useCssExport } from "./useCssExport";
 
 import "./App.css";
+import classNames from "classnames";
 
 enum UI {
   Editor,
@@ -24,16 +25,9 @@ enum UI {
 export const App = () => {
   const [ui, setUI] = useState(UI.Editor);
   const [mode, setMode] = useState(Mode.Gradient);
-  const [colorProfile, setColorProfile] = useState<ColorProfile>("p3");
-  const [colorStops, setColorStops] = useState<ColorStop[]>(() => [
-    { id: "1", color: new Color("#800"), position: 0, midpoint: 0.5 },
-    { id: "2", color: new Color("#080"), position: 0.5, midpoint: 0.5 },
-    { id: "3", color: new Color("#008"), position: 1, midpoint: 0.5 },
-  ]);
-  const [opacityStops, setOpacityStops] = useState<OpacityStop[]>(() => [
-    { id: "4", alpha: 1, position: 0, midpoint: 0.5 },
-    { id: "5", alpha: 0, position: 1, midpoint: 0.5 },
-  ]);
+  const [colorProfile, setColorProfile] = useState<ColorProfile>("srgb");
+  const [colorStops, setColorStops] = useState<ColorStop[]>(() => []);
+  const [opacityStops, setOpacityStops] = useState<OpacityStop[]>(() => []);
   const [controlPoints, setControlPoints] = useState<ControlPoints>(() => ({
     p1x: 0.25,
     p1y: 0.25,
@@ -42,6 +36,9 @@ export const App = () => {
   }));
   const [_degrees, setDegrees] = useState(0);
   const [stops, setStops] = useState(5);
+  const [previewBackground, setPreviewBackground] = useState(
+    PreviewBackground.CheckerDark
+  );
 
   const degrees = mode === Mode.Gradient ? _degrees : 90;
 
@@ -50,25 +47,45 @@ export const App = () => {
       colorProfile,
       colorStops,
       opacityStops,
-      controlPoints,
-      mode === Mode.Gradient ? undefined : stops
+      controlPoints
     );
-  }, [mode, colorProfile, colorStops, opacityStops, controlPoints, stops]);
+  }, [colorProfile, colorStops, opacityStops, controlPoints]);
 
   const cssExport = useCssExport({ colorScale, degrees });
 
   return (
     <div className="App">
-      <div style={{ display: "flex", gap: 6 }}>
-        <button onClick={() => setUI(UI.Editor)}>Editor</button>
-        <button onClick={() => setUI(UI.Export)}>Export</button>
+      <div className="App__Header">
+        <button
+          className={classNames(
+            "App__HeaderButton",
+            ui === UI.Editor && "App__HeaderButton--active"
+          )}
+          onClick={() => setUI(UI.Editor)}
+        >
+          Editor
+        </button>
+        <button
+          className={classNames(
+            "App__HeaderButton",
+            ui === UI.Export && "App__HeaderButton--active"
+          )}
+          onClick={() => setUI(UI.Export)}
+        >
+          Export
+        </button>
       </div>
       <Preview
+        className="App__Preview"
+        mode={mode}
         colorScale={colorScale}
         angle={(degrees * Math.PI) / 180}
+        stops={stops}
         cssExport={
           ui === UI.Export && mode === Mode.Gradient ? cssExport.css : undefined
         }
+        previewBackground={previewBackground}
+        onChangePreviewBackground={setPreviewBackground}
       />
       {ui === UI.Editor ? (
         <Editor
@@ -90,7 +107,11 @@ export const App = () => {
       ) : mode === Mode.Gradient ? (
         <GradientExport {...cssExport} />
       ) : (
-        <StopsExport />
+        <StopsExport
+          colorScale={colorScale}
+          stops={stops}
+          previewBackground={previewBackground}
+        />
       )}
     </div>
   );

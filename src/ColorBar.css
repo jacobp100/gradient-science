@@ -11,18 +11,43 @@
 
 .ColorBar__Stops {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 24px;
   width: var(--container-width);
+  user-select: none;
+  cursor: default;
+}
+
+.ColorBar__Label {
+  font-size: 8px;
+  line-height: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  opacity: 0.4;
 }
 
 .ColorBar__Stop {
   position: absolute;
+  top: 0;
+  left: 0;
   transform: translate(-50%, 0)
     translate3d(calc(var(--container-width) * var(--position)), 0, 0)
     rotate(var(--rotate));
   --rotate: 0deg;
+  z-index: 1;
 }
 
 .ColorBar__Stop--up {
   --rotate: 180deg;
+}
+
+.ColorBar__Lozenge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, 0)
+    translate3d(calc(var(--container-width) * var(--position)), 0, 0);
 }

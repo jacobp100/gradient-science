@@ -1,0 +1,7 @@
+.Stops {
+  display: flex;
+}
+
+.Stops__Stop {
+  flex: 1
+}

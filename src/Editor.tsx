@@ -1,7 +1,7 @@
 import { ColorBar } from "./ColorBar";
 import { ColorStopEditor } from "./ColorStopEditor";
 import { ControlPointsBezizer } from "./ControlPointsBezier";
-import { OpacityEditor } from "./OpacityEditor";
+import { OpacityStopEditor } from "./OpacityStopEditor";
 import {
   ColorProfile,
   ColorStop,
@@ -77,7 +77,7 @@ export const Editor = ({
     ui?.type === UIType.OpacityStop ? ui.id : undefined;
 
   return (
-    <>
+    <div className="Editor">
       <ColorBar
         width={200}
         colorProfile={colorProfile}
@@ -103,7 +103,7 @@ export const Editor = ({
         }}
       />
       {ui?.type === UIType.OpacityStop ? (
-        <OpacityEditor
+        <OpacityStopEditor
           opacityStops={opacityStops}
           onChangeOpacityStops={onChangeOpacityStops}
           selectedId={ui.id}
@@ -176,6 +176,6 @@ export const Editor = ({
           </label>
         </>
       )}
-    </>
+    </div>
   );
 };

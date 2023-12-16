@@ -64,12 +64,8 @@ export const Gradient = ({
       2 *
       Math.hypot(pixelWidth / 2, pixelHeight / 2) *
       Math.max(
-        Math.abs(
-          Math.sin(Math.PI / 2 - angle + Math.atan(pixelWidth / pixelHeight))
-        ),
-        Math.abs(
-          Math.cos(Math.PI / 2 - angle + Math.atan(pixelHeight / pixelWidth))
-        )
+        Math.abs(Math.cos(angle + Math.atan(pixelWidth / pixelHeight))),
+        Math.abs(Math.sin(angle + Math.atan(pixelHeight / pixelWidth)))
       );
 
     tileBatcher.redraw(

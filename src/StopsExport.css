@@ -1,0 +1,47 @@
+.StopsExport__Label {
+  flex: 1;
+  min-width: none;
+  text-overflow: ellipsis;
+}
+
+.ColorStops__Header {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.StopsExport__Table {
+  display: grid;
+  grid: auto-flow 20px / 24px repeat(var(--num-components), auto) 1fr;
+  align-items: center;
+  justify-items: flex-start;
+  column-gap: 4px;
+  row-gap: 4px;
+  font-variant: tabular-nums;
+}
+
+.StopsExport__Tab {
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 0 0 1px #333;
+}
+
+.StopsExport__Component {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.StopsExport__CopyRow {
+  justify-self: flex-end;
+}
+
+.ColorStops__Footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  margin-top: 12px;
+  gap: 4px;
+}
+
+.ColorStops__FooterTitle {
+  flex: 1;
+}

@@ -6,6 +6,7 @@ type Props = {
   min: number;
   max: number;
   scale?: number;
+  disabled?: boolean;
   onChange: (value: number) => void;
 };
 
@@ -15,6 +16,7 @@ export const NumericSlider = ({
   min,
   max,
   scale = 1,
+  disabled = false,
   onChange,
 }: Props) => {
   const roundValue = (v: number) =>
@@ -35,6 +37,7 @@ export const NumericSlider = ({
         type="range"
         min={min * scale}
         max={max * scale}
+        disabled={disabled}
         value={value}
         onChange={changeHandler}
       />
@@ -43,8 +46,9 @@ export const NumericSlider = ({
         <input
           className="NumericSlider__Value"
           type="number"
-          min={min}
-          max={max}
+          min={min * scale}
+          max={max * scale}
+          disabled={disabled}
           value={value}
           onChange={changeHandler}
         />

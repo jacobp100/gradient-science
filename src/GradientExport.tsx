@@ -6,8 +6,9 @@ import "./GradientExport.css";
 export const GradientExport = ({
   css,
   quality,
-  increaseQuality,
-  decreaseQuality,
+  qualityUp,
+  qualityDown,
+  setQuality,
 }: ReturnType<typeof useCssExport>) => {
   const codeRef = useRef<HTMLParagraphElement>(null);
 
@@ -20,8 +21,18 @@ export const GradientExport = ({
             {(quality * 100).toFixed(0)}% quality
           </span>
         </span>
-        <button onClick={decreaseQuality}>-</button>
-        <button onClick={increaseQuality}>+</button>
+        <button
+          onClick={() => setQuality(qualityDown ?? quality)}
+          disabled={qualityDown == null}
+        >
+          -
+        </button>
+        <button
+          onClick={() => setQuality(qualityUp ?? quality)}
+          disabled={qualityUp == null}
+        >
+          +
+        </button>
       </div>
       <p
         ref={codeRef}

@@ -1,24 +1,43 @@
 import { useState } from "react";
 import ColorScale from "./ColorScale";
 import { Gradient } from "./Gradient";
+import { Stops } from "./Stops";
+import { Mode, PreviewBackground } from "./types";
 
 import "./Preview.css";
+import classNames from "classnames";
 
 type Props = {
+  className: string;
+  mode: Mode;
   colorScale: ColorScale;
   angle: number;
+  stops: number;
   cssExport: string | undefined;
+  previewBackground: PreviewBackground;
+  onChangePreviewBackground: (previewBackground: PreviewBackground) => void;
 };
 
-export const Preview = ({ colorScale, angle, cssExport }: Props) => {
-  const [background, setBackground] = useState<string>("var(--checker-dark)");
+const size = 200;
+
+export const Preview = ({
+  className,
+  mode,
+  colorScale,
+  angle,
+  stops,
+  cssExport,
+  previewBackground,
+  onChangePreviewBackground,
+}: Props) => {
+  // const [background, setBackground] = useState<string>("var(--checker-dark)");
   const [hideCssExport, setHideCssExport] = useState(false);
 
   return (
-    <div className="Preview">
+    <div className={classNames("Preview", className)}>
       <div
         className="Preview__Container"
-        style={{ background }}
+        style={{ background: previewBackground }}
         onMouseDown={() => {
           setHideCssExport(true);
           const clear = () => {
@@ -28,30 +47,39 @@ export const Preview = ({ colorScale, angle, cssExport }: Props) => {
           window.addEventListener("mouseup", clear);
         }}
       >
-        <Gradient
-          width={200}
-          height={200}
-          colorScale={colorScale}
-          angle={angle}
-        />
+        {mode === Mode.Gradient ? (
+          <Gradient
+            width={size}
+            height={size}
+            colorScale={colorScale}
+            angle={angle}
+          />
+        ) : (
+          <Stops
+            width={size}
+            height={size}
+            colorScale={colorScale}
+            stops={stops}
+          />
+        )}
         {cssExport != null ? (
           <div
             className="Preview__Overlay"
             style={{
-              background: `${cssExport}, ${background}`,
+              background: `${cssExport}, ${previewBackground}`,
               opacity: hideCssExport ? 0 : 1,
             }}
           />
         ) : null}
         <select
           className="Preview__Select"
-          value={background}
-          onChange={(e) => setBackground(e.target.value as any)}
+          value={previewBackground}
+          onChange={(e) => onChangePreviewBackground(e.target.value as any)}
         >
-          <option value="black">Black</option>
-          <option value="white">White</option>
-          <option value="var(--checker-light)">Checker Light</option>
-          <option value="var(--checker-dark)">Checker Dark</option>
+          <option value={PreviewBackground.Black}>Black</option>
+          <option value={PreviewBackground.White}>White</option>
+          <option value={PreviewBackground.CheckerLight}>Checker Light</option>
+          <option value={PreviewBackground.CheckerDark}>Checker Dark</option>
         </select>
       </div>
     </div>

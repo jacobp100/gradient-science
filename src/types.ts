@@ -2,6 +2,13 @@ import type Color from "colorjs.io";
 
 export type ColorProfile = "p3" | "srgb";
 
+export enum PreviewBackground {
+  Black = "black",
+  White = "white",
+  CheckerLight = "var(--checker-light)",
+  CheckerDark = "var(--checker-dark)",
+}
+
 export enum Mode {
   Gradient = "gradient",
   Stops = "stops",

@@ -1,0 +1,16 @@
+.IndexHeader {
+  display: flex;
+}
+
+.IndexHeader__Title {
+  flex: none;
+}
+
+.IndexHeader__Aside {
+  display: flex;
+  flex: 1 0 0;
+}
+
+.IndexHeader__Aside--right {
+justify-content: flex-end;
+}

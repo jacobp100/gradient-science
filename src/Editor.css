@@ -1,6 +1,13 @@
+.Editor {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
 .Editor__Field {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  min-height: 20px;
 }
 
 .Editor__FieldLabel {

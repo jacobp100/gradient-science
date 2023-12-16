@@ -1,13 +1,51 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+:root {
+  background: black;
+  color: white;
+  color-scheme: dark;
+
+  --checker-light: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="0" y="0" width="20" height="20" fill="%23fff"/><path d="M0 0H10V20H20V10H0Z" fill="%23eee"/></svg>');
+  --checker-dark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect x="0" y="0" width="20" height="20" fill="%23000"/><path d="M0 0H10V20H20V10H0Z" fill="%23111"/></svg>');
+}
+
+body {
+  margin: 0;
+  font: 14px/16px -apple-system;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 99px;
+  background: #888;
+  margin-top: -11px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Copied above - iOS 13 Safari won't parse the rule if there are -moz selectors */
+input[type="range"]::-moz-range-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 99px;
+  background: #888;
+  margin-top: -11px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  border-radius: 99px;
+  background: #333;
 }

@@ -1,6 +1,8 @@
 import Color from "colorjs.io";
-import { ColorStop } from "./types";
+import { IndexHeader } from "./IndexHeader";
 import { NumericSlider } from "./NumericSlider";
+import { ColorStop } from "./types";
+import { useKeyboardInput } from "./useKeyboardInput";
 
 import "./ColorStopEditor.css";
 
@@ -100,6 +102,18 @@ export const ColorStopEditor = ({
     onChangeColorStops(nextStops);
   };
 
+  const setPosition = (position: number) => {
+    const nextStops = colorStops.slice();
+    nextStops[selectedIndex] = { ...stop, position };
+    onChangeColorStops(nextStops);
+  };
+
+  const setMidpoint = (midpoint: number) => {
+    const nextStops = colorStops.slice();
+    nextStops[selectedIndex] = { ...stop, midpoint };
+    onChangeColorStops(nextStops);
+  };
+
   const remove = () => {
     const nextStops = colorStops.slice();
     nextStops.splice(selectedIndex, 1);
@@ -107,19 +121,56 @@ export const ColorStopEditor = ({
     onChangeColorStops(nextStops);
   };
 
+  useKeyboardInput((key) => {
+    if (key === "Escape") {
+      onChangeSelectedId(undefined);
+      return true;
+    } else if (key === "Backspace") {
+      remove();
+      return true;
+    }
+    return false;
+  });
+
   return (
     <div className="ColorStopEditor">
-      {chanelConfig.map((config) => (
-        <NumericSlider
-          key={config.label}
-          label={config.label}
-          min={config.min}
-          max={config.max}
-          scale={config.scale}
-          value={color.coords[config.index]}
-          onChange={(value) => setChanelValue(config, value)}
-        />
-      ))}
+      <IndexHeader
+        currentIndex={selectedIndex}
+        totalIndices={colorStops.length}
+        previousId={previousStop?.id}
+        nextId={nextStop?.id}
+        onSelectId={onChangeSelectedId}
+      />
+      <div className="ColorStopEditor__Channels">
+        {chanelConfig.map((config) => (
+          <NumericSlider
+            key={config.label}
+            label={config.label}
+            min={config.min}
+            max={config.max}
+            scale={config.scale}
+            value={color.coords[config.index]}
+            onChange={(value) => setChanelValue(config, value)}
+          />
+        ))}
+      </div>
+      <NumericSlider
+        label="%"
+        min={0}
+        max={1}
+        scale={100}
+        value={stop.position}
+        onChange={setPosition}
+      />
+      <NumericSlider
+        label="M"
+        min={0}
+        max={1}
+        scale={100}
+        disabled={nextStop == null}
+        value={stop.midpoint}
+        onChange={setMidpoint}
+      />
       <div className="ColorStopEditor__Footer">
         <select
           value={color.spaceId}

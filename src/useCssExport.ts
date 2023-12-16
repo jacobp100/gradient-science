@@ -13,7 +13,10 @@ export const useCssExport = ({ colorScale, degrees }: Props) => {
   const { colorStopsString, qualityUp, qualityDown } = useMemo(() => {
     const colors = Array.from({ length: 101 }, (_, index) => {
       const p = index / 100;
-      const { r, g, b, a } = colorScale.at(p);
+      const {
+        coords: [r, g, b],
+        alpha: a,
+      } = colorScale.at(p);
       return { r, g, b, a, p };
     });
 
@@ -64,7 +67,10 @@ export const useCssExport = ({ colorScale, degrees }: Props) => {
       }
     } while (didRemove);
 
-    const qualityDown = getNextCandidate(Infinity)?.quality;
+    let qualityDown = getNextCandidate(Infinity)?.quality;
+    if (qualityDown != null && qualityDown === quality) {
+      qualityDown -= 0.01;
+    }
 
     const colorStopStrings = colors.map(({ r, g, b, a, p }) => {
       let color: string;
@@ -114,7 +120,8 @@ export const useCssExport = ({ colorScale, degrees }: Props) => {
   return {
     css: `linear-gradient(${degrees}deg, ${colorStopsString})`,
     quality,
-    increaseQuality: () => setQuality(qualityUp ?? quality),
-    decreaseQuality: () => setQuality(qualityDown ?? quality),
+    qualityUp,
+    qualityDown,
+    setQuality,
   };
 };
